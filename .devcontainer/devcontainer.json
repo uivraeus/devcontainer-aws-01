@@ -1,0 +1,49 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "AWS spaces",
+	"image": "mcr.microsoft.com/devcontainers/base:resolute",
+	
+	// Share devcontainer instance for all workspaces in the parent folder
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  	"workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspaces,type=bind,consistency=cached",
+	
+	"features": {
+		"ghcr.io/devcontainers/features/node:2": {},
+		"ghcr.io/devcontainers/features/python:1": {},
+		"ghcr.io/devcontainers/features/terraform:1": {},
+		"ghcr.io/devcontainers/features/aws-cli:1": {},
+		"ghcr.io/devcontainers/features/go:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+			"version": "latest",
+			"helm": "latest",
+			"minikube": "none"
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"enableNonRootDocker": "true",
+			"moby": "false"
+		}
+	},
+	
+	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
+
+	"customizations": {
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"amazonwebservices.aws-toolkit-vscode",
+				"anthropic.claude-code",
+			]
+		}
+	},
+	
+	"mounts": [
+		"source=aws-workspaces-claude-home,target=/home/vscode/.claude,type=volume", // Retain claude data accross container rebuilds
+		"source=aws-workspaces-aws-home,target=/home/vscode/.aws,type=volume", // Retain AWS CLI config/sso/credentials cache across container rebuilds
+	],
+	"containerEnv": {
+		"CLAUDE_CONFIG_DIR": "/home/vscode/.claude", // Make ~/.claude.json end up in persistent ~/.claude/ mount
+	},
+}
