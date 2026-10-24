@@ -40,3 +40,11 @@ code project-a
 
 If you want to have multiple workspaces open, you can either just "open" the parent folder or run the `code` command for each explicit workspace directory (will result in multiple VS Code instances).
 
+## GitHub CLI
+
+`gh` needs no `gh auth login`. A wrapper ([gh-wrapper.sh](.devcontainer/gh-wrapper.sh), installed as `/usr/local/bin/gh`) fetches the token from git's credential helper, i.e. the host's credentials forwarded by VS Code, on every call, just like `git` operations. No token is stored in the container.
+
+* Works only while VS Code is attached (same as `git` credential forwarding).
+* The token has the scopes the host's credential manager requested (`repo`, `workflow`, `gist` for GCM), so features needing e.g. `read:org` won't work.
+* `gh` aliases are defined in [gh-aliases.sh](.devcontainer/gh-aliases.sh), since `~/.config/gh` doesn't survive a rebuild.
+

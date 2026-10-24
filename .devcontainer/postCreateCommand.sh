@@ -12,6 +12,10 @@ sudo chown -R "$(id -u):$(id -g)" "$HOME"
 
 $SCRIPT_DIR/download-tools.sh
 
+# gh wrapper supplying GH_TOKEN from the host's git credentials (see gh-wrapper.sh)
+sudo install -m 755 "${SCRIPT_DIR}/gh-wrapper.sh" /usr/local/bin/gh
+$SCRIPT_DIR/gh-aliases.sh
+
 sudo apt update
 sudo DEBIAN_FRONTEND=noninteractive apt install -y \
   bat \
